@@ -10,7 +10,7 @@ on:
       - dev
       - main
     paths-ignore: 
-      - '.github/workflows/**'
+      - '.github/workflowss/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
