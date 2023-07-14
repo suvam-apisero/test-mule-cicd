@@ -56,7 +56,7 @@ jobs:
         run: |
           artifactName1=$(ls target/*.jar | head -1)
           commitHash=$(git rev-parse --short "$GITHUB_SHA")
-          artifactName2=$(echo $artifactName1 | sed "s/.jar/-$commitHash.`'%Y-%m-%d_%H%M%S'`.jar/g")
+          artifactName2=$(echo $artifactName1 | sed "s/.jar/-$commitHash.`date +'%Y-%m-%d_%H%M%S'`.jar/g")
           mv $artifactName1 $artifactName2
           
       - name: Print Artifact Name
