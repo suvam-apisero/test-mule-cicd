@@ -55,8 +55,9 @@ jobs:
       - name: Update Artifact name with commit hash, append date-time
         run: |
           artifactName1=$(ls target/*.jar | head -1)
+          echo default App Jar name : $artifactName1
           commitHash=$(git rev-parse --short "$GITHUB_SHA")
-          artifaceName2=$(artifactName1 | sed "s/.jar/-$commitHash.`'%Y-%m-%d_%H%M%S'`.jar/g")
+          artifaceName2=$($artifactName1 | sed "s/.jar/-$commitHash.`'%Y-%m-%d_%H%M%S'`.jar/g")
           mv $artifactName1 $artifactName2
           echo Mule App Jar name : $artifactName1
           
