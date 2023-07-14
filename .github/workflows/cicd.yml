@@ -65,27 +65,41 @@ jobs:
           name: artifacts
           path: target/*.jar
       
-  deploy:
-    name: Deploy to CloudHub
-    needs: [build]
-    runs-on: ubuntu-latest
-    environment: ${{github.ref_name}}
-    steps:
-      - uses: actions/checkout@v3 
-      
-      - uses: actions/download-artifact@v3
-        with:
-          name: artifacts
-          #path: ${{ github.workspace }}
+#   deploy:
+#     name: Deploy to CloudHub
+#     needs: [build]
+#     runs-on: ubuntu-latest
+#     environment: ${{github.ref_name}}
+#     steps:
+#       - name: Manual approval required
+#         if: contains(fromJSON('["qa", "main"]'), github.ref_name)
+#         uses: trstringer/manual-approval@v1
+#         timeout-minutes: 2
+#         with:
+#           secret: ${{ github.TOKEN }}
+#           approvers: suvam-apisero
+#           minimum-approvals: 1
+#           issue-title: "Deploying app to ${{github.ref_name}} environment"
+#           issue-body: "Please approve or deny the app deployment"
+#           exclude-workflow-initiator-as-approver: false
+#           additional-approved-words: ''
+#           additional-denied-words: ''
           
-      - name: Deploy with Maven
-        run: |
-          artifactName=$(find . -type f -name "*.jar" | head -1)
-          mvn mule:deploy -DskipTests -s .maven/settings.xml \
-          -Dmule.artifact=${{vars.artifactName}} -Dmule.version=${{vars.MULE_VERSION}} \
-          -Denvironment=${{vars.CLOUDHUB_ENV}} -Dregion=${{vars.DEPLOYMENT_REGION}} \
-          -Dworkers=${{vars.WORKER_1}} -DworkerType=${{vars.WORKER}} \
-          -DbusinessGroupId=${{secrets.OPR_BUS_GRP_ID}} -DapplicationName=${{vars.APP_NAME}} \
-          -Denv=${{vars.MULE_ENV}} -DsecretKey=${{secrets.SECRET_KEY}} \
-          -Dparameter_pom=${{vars.RUNTIME_PARAM}}
+#       - uses: actions/checkout@v3 
+      
+#       - uses: actions/download-artifact@v3
+#         with:
+#           name: artifacts
+#           #path: ${{ github.workspace }}
+          
+#       - name: Deploy with Maven
+#         run: |
+#           artifactName=$(find . -type f -name "*.jar" | head -1)
+#           mvn mule:deploy -DskipTests -s .maven/settings.xml \
+#           -Dmule.artifact=${{vars.artifactName}} -Dmule.version=${{vars.MULE_VERSION}} \
+#           -Denvironment=${{vars.CLOUDHUB_ENV}} -Dregion=${{vars.DEPLOYMENT_REGION}} \
+#           -Dworkers=${{vars.WORKER_1}} -DworkerType=${{vars.WORKER}} \
+#           -DbusinessGroupId=${{secrets.OPR_BUS_GRP_ID}} -DapplicationName=${{vars.APP_NAME}} \
+#           -Denv=${{vars.MULE_ENV}} -DsecretKey=${{secrets.SECRET_KEY}} \
+#           -Dparameter_pom=${{vars.RUNTIME_PARAM}}
           
