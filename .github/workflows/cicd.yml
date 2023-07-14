@@ -22,7 +22,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    name: Build and Test
+    name: Build and Test with Maven
     
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -32,13 +32,61 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      
+      - name: Setup JDK 1.8
+        uses: action/setup-java@v3
+        with:
+          java-version: 1.8
+      
+      - name: Test and Build Jar
+        run: mvn -B package -f pom.xml -s .maven/settings.xml -Denv=${{vars.MULE_ENV}} -Dkey=${{vars.SECRET_KEY}}
+        
+      - name: Publish MUnit Tests report
+        if: always()
+        uses: actions/upload-artifact@v3-preview
+        with:
+          name: munit-test-reports
+          path: target/site/munit/coverage/
+        
+      - name: Update Artifact name with commit hash, append date-time
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          artifactName1=$(ls target/*.jar | head -1)
+          commitHash=$(git rev-parse --short "$GITHUB_SHA")
+          artifaceName2=$(artifactName1 | sed "s/.jar/-$commitHash.`'%Y-%m-%d_%H%M%S'`.jar/g")
+          mv $artifactName1 $artifactName2
+          echo Mule App Jar name : $artifactName1
+          
+      - name: Print Artifact Name
+        run: echo $(ls target/*.jar | head -1)
+      
+      - name: Publish Artifact Jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts
+          path: target/*.jar
+      
+  deploy:
+    name: Deploy to CloudHub
+    needs: [build]
+    runs-on: ubuntu-latest
+    environment: ${{github.ref_name}}
+    steps:
+      - uses: actions/checkout@v3 
+      
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifacts
+          #path: ${{ github.workspace }}
+          
+      - name: Deploy with Maven
+        run: |
+          artifactName=$(find . -type f -name "*.jar" | head -1)
+          mvn mule:deploy -DskipTests -s .maven/settings.xml \
+          -Dmule.artifact=${{vars.artifactName}} -Dmule.version=${{vars.MULE_VERSION}} \
+          -DconnectedAppClientId=${{secrets.CONNECTED_APP_CLIENT_ID}} \
+          -DconnectedAppClientSecret=${{secrets.CONNECTED_APP_CLIENT_SECRET}} \
+          -Denvironment=${{vars.CLOUDHUB_ENV}} -Dregion=${{vars.DEPLOYMENT_REGION}} \
+          -Dworkers=${{vars.WORKER_1}} -DworkerType=${{vars.WORKER_SMALL}} \
+          -DbusinessGroupId=${{secrets.OPR_BUS_GRP_ID}} -DapplicationName=${{vars.APP_NAME}} \
+          -Denv=${{vars.MULE_ENV}} -DsecretKey=${{secrets.SECRET_KEY}}
+          
