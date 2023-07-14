@@ -84,7 +84,7 @@ jobs:
           mvn mule:deploy -DskipTests -s .maven/settings.xml \
           -Dmule.artifact=${{vars.artifactName}} -Dmule.version=${{vars.MULE_VERSION}} \
           -Denvironment=${{vars.CLOUDHUB_ENV}} -Dregion=${{vars.DEPLOYMENT_REGION}} \
-          -Dworkers=${{vars.WORKER_1}} -DworkerType=${{vars.WORKER_MICRO}} \
+          -Dworkers=${{vars.WORKER_1}} -DworkerType=${{vars.WORKER}} \
           -DbusinessGroupId=${{secrets.OPR_BUS_GRP_ID}} -DapplicationName=${{vars.APP_NAME}} \
           -Denv=${{vars.MULE_ENV}} -DsecretKey=${{secrets.SECRET_KEY}} \
           -Dparameter_pom=${{vars.RUNTIME_PARAM}}
