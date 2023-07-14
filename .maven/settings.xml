@@ -3,13 +3,13 @@
 	<servers>
 		<server>
 			<id>MuleRepository</id>
-			<username>${{secrets.NEXUS_USERNAME}}</username>
-			<password>${{secrets.NEXUS_PASSWORD}}</password>
+			<username>${secrets.NEXUS_USERNAME}</username>
+			<password>${secrets.NEXUS_PASSWORD}</password>
 		</server>
 		<server>
 			<id>anypoint-exchange-v3</id>
 			<username>~~~Client~~~</username>
-			<password>$${{secrets.CONNECTED_APP_CLIENT_ID}}~?~$${{secrets.CONNECTED_APP_CLIENT_SECRET}}</password>
+			<password>${secrets.CONNECTED_APP_CLIENT_ID}~?~${secrets.CONNECTED_APP_CLIENT_SECRET}</password>
 		</server>
 	</servers>
 	<pluginGroups>
