@@ -40,6 +40,9 @@ jobs:
           java-version: 8
       
       - name: Test and Build Jar
+        env:
+          nexus_username: ${{ secrets.NEXUS_USERNAME }}
+          nexus_password: ${{ secrets.NEXUS_PASSWORD }}
         run: mvn -B package -f pom.xml -s .maven/settings.xml -Denv=${{vars.MULE_ENV}} -Dkey=${{vars.SECRET_KEY}}
         
       - name: Publish MUnit Tests report
