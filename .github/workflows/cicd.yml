@@ -67,7 +67,35 @@ jobs:
         with:
           name: artifacts
           path: target/*.jar
+          
+  create_github_issue_for_uat_deployment_attempt:
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
       
+    steps:
+      - name: Create GitHub Issue
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const issue = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'UAT Deployment needs approval',
+              body: `Please check the UAT environment and approve the deployment if everything looks good.`
+            }
+            github.rest.issues.create(issue)
+ 
+  final:
+    needs: [create_github_issue_for_uat_deployment_attempt]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Final stage
+        run: echo "Reached Final stage"
+        
+        
 #   deploy:
 #     name: Deploy to CloudHub
 #     needs: [build]
