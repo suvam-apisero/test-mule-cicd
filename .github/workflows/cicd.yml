@@ -55,7 +55,7 @@ jobs:
         uses: actions/upload-artifact@v2-preview
         with:
           name: munit-test-reports
-          path: target/site/munit/coverage/*
+          path: target/*
           
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
@@ -63,7 +63,6 @@ jobs:
         with:
           files: |
             target/site/munit/coverage/*
-            target/surefire-reports/*
         
 #       - name: Update Artifact name with commit hash, append date-time
 #         run: |
