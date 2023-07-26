@@ -11,7 +11,7 @@ on:
       - main
     # Don't trigger the workflow when only workflow file / gitignore / README has the changes
     paths-ignore: 
-      - '.github/workflows/**'
+#       - '.github/workflows/**'
       - '.gitignore'
       - 'README.md'
 
@@ -51,49 +51,57 @@ jobs:
         with:
           name: munit-test-reports
           path: target/site/munit/coverage/*
+          
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            target/site/munit/coverage/*.xml
         
-      - name: Update Artifact name with commit hash, append date-time
-        run: |
-          artifactName1=$(ls target/*.jar | head -1)
-          commitHash=$(git rev-parse --short "$GITHUB_SHA")
-          artifactName2=$(echo $artifactName1 | sed "s/.jar/-$commitHash.`date +'%Y-%m-%d_%H%M%S'`.jar/g")
-          mv $artifactName1 $artifactName2
+#       - name: Update Artifact name with commit hash, append date-time
+#         run: |
+#           artifactName1=$(ls target/*.jar | head -1)
+#           commitHash=$(git rev-parse --short "$GITHUB_SHA")
+#           artifactName2=$(echo $artifactName1 | sed "s/.jar/-$commitHash.`date +'%Y-%m-%d_%H%M%S'`.jar/g")
+#           mv $artifactName1 $artifactName2
           
-      - name: Print Artifact Name
-        run: echo $(ls target/*.jar | head -1)
+#       - name: Print Artifact Name
+#         run: echo $(ls target/*.jar | head -1)
       
-      - name: Publish Artifact Jar
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifacts
-          path: target/*.jar
+#       - name: Publish Artifact Jar
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: artifacts
+#           path: target/*.jar
+        
           
-  create_github_issue_for_uat_deployment_attempt:
-    needs: [build]
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
+#   create_github_issue_for_uat_deployment_attempt:
+#     needs: [build]
+#     runs-on: ubuntu-latest
+#     permissions:
+#       issues: write
       
-    steps:
-      - name: Create GitHub Issue
-        uses: actions/github-script@v5
-        with:
-          script: |
-            const issue = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: 'UAT Deployment needs approval',
-              body: `Please check the UAT environment and approve the deployment if everything looks good.`
-            }
-            github.rest.issues.create(issue)
+#     steps:
+#       - name: Create GitHub Issue
+#         uses: actions/github-script@v5
+#         with:
+#           script: |
+#             const issue = {
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               title: 'UAT Deployment needs approval',
+#               body: `Please check the UAT environment and approve the deployment if everything looks good.`
+#             }
+#             github.rest.issues.create(issue)
  
-  final:
-    needs: [create_github_issue_for_uat_deployment_attempt]
-    runs-on: ubuntu-latest
+#   final:
+#     needs: [create_github_issue_for_uat_deployment_attempt]
+#     runs-on: ubuntu-latest
     
-    steps:
-      - name: Final stage
-        run: echo "Reached Final stage"
+#     steps:
+#       - name: Final stage
+#         run: echo "Reached Final stage"
         
         
 #   deploy:
