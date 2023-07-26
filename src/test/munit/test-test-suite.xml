@@ -44,12 +44,12 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="skippedTest" doc:id="c1c7f1f9-fa65-4629-8dab-1e99837f480d" description="Test" ignore="true">
+	<munit:test name="skippedTest" doc:id="c1c7f1f9-fa65-4629-8dab-1e99837f480d" description="Test">
 		<munit:execution >
 			<flow-ref doc:name="Flow-ref to testFlow" doc:id="fa47c23a-29db-470e-be1c-9d8cd43aefdb" name="testFlow"/>
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:verify-call doc:name="Verify call" doc:id="3ec9fe09-d8e0-4d97-b735-f5e91f5aa3e6" processor="logger" times="1">
+			<munit-tools:verify-call doc:name="Verify call" doc:id="3ec9fe09-d8e0-4d97-b735-f5e91f5aa3e6" processor="logger" times="2">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="da58d249-5983-48c5-b075-575b9e4856cb" attributeName="doc:id" />
 				</munit-tools:with-attributes>

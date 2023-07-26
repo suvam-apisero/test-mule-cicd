@@ -65,6 +65,7 @@ jobs:
             target/surefire-reports/*.xml
           check_name: "Munit Test Results"
           comment_title: "Munit Tests Comments"
+          time_unit: milliseconds
 #           comment_mode: always
 #           report_suite_logs: any
 #           report_individual_runs: true
