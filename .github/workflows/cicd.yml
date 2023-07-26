@@ -1,6 +1,11 @@
 # This is a basic workflow to help you get started with Actions
 
 name: Deploy Mule APIs to CloudHub
+permissions:
+  contents: read
+  issues: read
+  checks: write
+  pull-requests: write
 
 # Controls when the workflow will run
 on:
@@ -43,7 +48,7 @@ jobs:
         env:
           nexus_username: ${{ secrets.NEXUS_USERNAME }}
           nexus_password: ${{ secrets.NEXUS_PASSWORD }}
-        run: mvn -B package -f pom.xml -s .maven/settings.xml -Denv=${{vars.MULE_ENV}} -Dkey=${{secrets.SECRET_KEY}}
+        run: mvn -B test -f pom.xml -s .maven/settings.xml -Denv=${{vars.MULE_ENV}} -Dkey=${{secrets.SECRET_KEY}}
         
       - name: Publish MUnit Tests report
         if: always()
@@ -57,7 +62,7 @@ jobs:
         if: always()
         with:
           files: |
-            target/site/munit/coverage/*.xml
+            target/site/munit/coverage/*.json
         
 #       - name: Update Artifact name with commit hash, append date-time
 #         run: |
