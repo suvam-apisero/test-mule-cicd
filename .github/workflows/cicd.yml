@@ -62,7 +62,8 @@ jobs:
         if: always()
         with:
           files: |
-            target/site/munit/coverage/*.json
+            target/site/munit/coverage/*.xml
+            target/sonar-reports/*.xml
         
 #       - name: Update Artifact name with commit hash, append date-time
 #         run: |
