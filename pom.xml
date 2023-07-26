@@ -70,6 +70,8 @@
 						<runCoverage>true</runCoverage>
 						<formats>
 							<format>html</format>
+							<format>json</format>
+							<format>sonar</format>
 						</formats>
 					</coverage>
 				</configuration>
