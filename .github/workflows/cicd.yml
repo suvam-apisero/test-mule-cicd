@@ -57,18 +57,9 @@ jobs:
           name: munit-test-reports
           path: target/site/munit/coverage/*
           
-      - name: HTML Preview
+      - name: Test results in summary
         if: always()
-        id: html_preview
-        uses: pavi2410/html-preview-action@v2
-        with:
-          html_file: 'target/site/munit/coverage/summary.html'
-          
-      - name: Print Artifact Name
-        if: always()
-        run: |
-          echo $(ls target/) 
-          echo ${{ steps.html_preview.outputs.url }}
+        run: echo 'Read more [here](target/site/munit/coverage/summary.html)' >> $GITHUB_STEP_SUMMARY
           
 #       - name: Publish Test Results
 #         uses: EnricoMi/publish-unit-test-result-action@v2
