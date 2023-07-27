@@ -52,7 +52,7 @@ jobs:
         
       - name: Publish MUnit Tests report
         if: always()
-        uses: actions/upload-artifact@v2-preview
+        uses: actions/upload-artifact@v3
         with:
           name: munit-test-reports
           path: target/*
@@ -71,6 +71,16 @@ jobs:
 #           report_individual_runs: true
 #           deduplicate_classes_by_file_name: true
           
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          token: 810b8ed1-0904-4538-877e-6e344b5addb0
+          directory: target/site/munit/coverage/
+          files: ./*.xml,./*.html
+          flags: munit-tests
+          name: codecov-mulesoft-test
+          verbose: true
           
         
 #       - name: Update Artifact name with commit hash, append date-time
