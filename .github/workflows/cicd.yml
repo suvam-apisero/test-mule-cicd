@@ -48,7 +48,10 @@ jobs:
         env:
           nexus_username: ${{ secrets.NEXUS_USERNAME }}
           nexus_password: ${{ secrets.NEXUS_PASSWORD }}
-        run: mvn -B package -f pom.xml -s .maven/settings.xml -Denv=${{vars.MULE_ENV}} -Dkey=${{secrets.SECRET_KEY}}
+        run: mvn -B test -f pom.xml -s .maven/settings.xml -Denv=${{vars.MULE_ENV}} -Dkey=${{secrets.SECRET_KEY}}
+        
+      - name: Print Artifact Name
+        run: echo $(ls target/) 
         
       - name: Publish MUnit Tests report
         if: always()
