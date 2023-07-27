@@ -52,7 +52,7 @@ jobs:
         
       - name: Publish MUnit Tests report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2-preview
         with:
           name: munit-test-reports
           path: target/*
@@ -77,7 +77,7 @@ jobs:
         with:
           token: 810b8ed1-0904-4538-877e-6e344b5addb0
           directory: target/site/munit/coverage/
-          files: sonar.xml,*.html,*.json,target/sonar-reports/*.xml,target/surefire-reports/*.xml
+          files: sonar.xml,
           flags: munit-tests
           name: codecov-mulesoft-test
           verbose: true
