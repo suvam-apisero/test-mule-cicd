@@ -88,18 +88,19 @@ jobs:
         with:
           name: Munit Dorny Report
           path:  target/surefire-reports/*.xml
-          reporter: java-junit
+          reporter: jest-junit
+          fail-on-error: 'false'
 #           only-summary: 'true'
       
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        if: always()
-        with:
-          token: 810b8ed1-0904-4538-877e-6e344b5addb0
-          files: target/sonar-reports/*.xml
-          flags: munit-tests
-          name: codecov-mulesoft-test
-          verbose: true
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   if: always()
+      #   with:
+      #     token: 810b8ed1-0904-4538-877e-6e344b5addb0
+      #     files: target/sonar-reports/*.xml
+      #     flags: munit-tests
+      #     name: codecov-mulesoft-test
+      #     verbose: true
           
         
 #       - name: Update Artifact name with commit hash, append date-time

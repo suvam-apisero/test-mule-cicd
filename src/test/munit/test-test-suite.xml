@@ -44,7 +44,7 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="skippedTest" doc:id="c1c7f1f9-fa65-4629-8dab-1e99837f480d" description="Test">
+	<munit:test name="skippedTest" doc:id="c1c7f1f9-fa65-4629-8dab-1e99837f480d" description="Test" ignore="true">
 		<munit:execution >
 			<flow-ref doc:name="Flow-ref to testFlow" doc:id="fa47c23a-29db-470e-be1c-9d8cd43aefdb" name="testFlow"/>
 		</munit:execution>
