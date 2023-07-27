@@ -88,7 +88,7 @@ jobs:
         with:
           name: Munit Dorny Report
           path:  target/surefire-reports/*.xml
-          reporter: jest-junit
+          reporter: java-junit
           fail-on-error: 'false'
 #           only-summary: 'true'
       
