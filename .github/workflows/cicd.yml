@@ -55,7 +55,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: munit-test-reports
-          path: target/*
+          path: target/site/munit/coverage/*
           
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
@@ -71,6 +71,14 @@ jobs:
 #           report_individual_runs: true
 #           deduplicate_classes_by_file_name: true
           
+      - name: Dorny Test Report
+        uses: dorny/test-reporter@v1
+        with:
+          name: Munit Dorny Report
+          path: 'target/site/munit/coverage/*.xml'
+          reporter: jest-junit
+          only-summary: 'true'
+      
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         if: always()
