@@ -50,16 +50,25 @@ jobs:
           nexus_password: ${{ secrets.NEXUS_PASSWORD }}
         run: mvn -B test -f pom.xml -s .maven/settings.xml -Denv=${{vars.MULE_ENV}} -Dkey=${{secrets.SECRET_KEY}}
         
-      - name: Print Artifact Name
-        if: always()
-        run: echo $(ls target/) 
-        
       - name: Publish MUnit Tests report
         if: always()
         uses: actions/upload-artifact@v2-preview
         with:
           name: munit-test-reports
           path: target/site/munit/coverage/*
+          
+      - name: HTML Preview
+        if: always()
+        id: html_preview
+        uses: pavi2410/html-preview-action@v2
+        with:
+          html_file: 'target/site/munit/coverage/summary.html'
+          
+      - name: Print Artifact Name
+        if: always()
+        run: |
+          echo $(ls target/) 
+          echo ${{ steps.html_preview.outputs.url }}
           
 #       - name: Publish Test Results
 #         uses: EnricoMi/publish-unit-test-result-action@v2

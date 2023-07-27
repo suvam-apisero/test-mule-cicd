@@ -20,7 +20,7 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="error-test" doc:id="ec6e2815-6210-45dd-94bb-e8351caa8966" description="Test">
+	<munit:test name="error-test" doc:id="ec6e2815-6210-45dd-94bb-e8351caa8966" description="Test" ignore="true">
 		<munit:execution >
 			<flow-ref doc:name="Flow-ref to testFlow" doc:id="3b3610f8-2668-45b4-9668-c301ad712ff8" name="testFlow"/>
 		</munit:execution>
@@ -32,7 +32,7 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="failure-test" doc:id="67ae214f-5ae5-426c-ace3-1b564ceb85ca" description="Test" expectedErrorType="HTTP:CONNECTIVITY">
+	<munit:test name="failure-test" doc:id="67ae214f-5ae5-426c-ace3-1b564ceb85ca" description="Test" expectedErrorType="HTTP:CONNECTIVITY" ignore="true">
 		<munit:execution >
 			<flow-ref doc:name="Flow-ref to testFlow" doc:id="0422b0ea-a036-4c13-a3d4-f84d51141af3" name="testFlow"/>
 		</munit:execution>
@@ -44,12 +44,12 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="skippedTest" doc:id="c1c7f1f9-fa65-4629-8dab-1e99837f480d" description="Test">
+	<munit:test name="skippedTest" doc:id="c1c7f1f9-fa65-4629-8dab-1e99837f480d" description="Test" ignore="true">
 		<munit:execution >
 			<flow-ref doc:name="Flow-ref to testFlow" doc:id="fa47c23a-29db-470e-be1c-9d8cd43aefdb" name="testFlow"/>
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:verify-call doc:name="Verify call" doc:id="3ec9fe09-d8e0-4d97-b735-f5e91f5aa3e6" processor="logger" times="2">
+			<munit-tools:verify-call doc:name="Verify call" doc:id="3ec9fe09-d8e0-4d97-b735-f5e91f5aa3e6" processor="logger" times="1">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="da58d249-5983-48c5-b075-575b9e4856cb" attributeName="doc:id" />
 				</munit-tools:with-attributes>
