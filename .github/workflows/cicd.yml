@@ -61,6 +61,7 @@ jobs:
         uses: test-summary/action@v2
         with:
           paths: "target/surefire-reports/*.xml"
+          show: "all"
         if: always()
           
 #       - name: Test results in summary
