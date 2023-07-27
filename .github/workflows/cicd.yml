@@ -52,7 +52,7 @@ jobs:
         
       - name: Publish MUnit Tests report
         if: always()
-        uses: actions/upload-artifact@v2-preview
+        uses: actions/upload-artifact@v3
         with:
           name: munit-test-reports
           path: target/*
@@ -65,7 +65,7 @@ jobs:
             target/surefire-reports/*.xml
           check_name: "Munit Test Results"
           comment_title: "Munit Tests Comments"
-          time_unit: "milliseconds"
+          time_unit: milliseconds
 #           comment_mode: always
 #           report_suite_logs: any
 #           report_individual_runs: true
@@ -77,7 +77,7 @@ jobs:
         with:
           token: 810b8ed1-0904-4538-877e-6e344b5addb0
           directory: target/site/munit/coverage/
-          files: sonar.xml,
+          files: sonar.xml,munit-coverage.json,summary.html
           flags: munit-tests
           name: codecov-mulesoft-test
           verbose: true
