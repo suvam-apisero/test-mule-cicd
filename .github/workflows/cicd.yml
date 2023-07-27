@@ -57,9 +57,16 @@ jobs:
           name: munit-test-reports
           path: target/site/munit/coverage/*
           
-      - name: Test results in summary
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: "target/surefire-reports/*.xml"
+          output: test-summary.md
         if: always()
-        run: echo 'Read more [here](target/site/munit/coverage/summary.html)' >> $GITHUB_STEP_SUMMARY
+          
+#       - name: Test results in summary
+#         if: always()
+#         run: echo 'Read more [here](target/site/munit/coverage/summary.html)' >> $GITHUB_STEP_SUMMARY
           
 #       - name: Publish Test Results
 #         uses: EnricoMi/publish-unit-test-result-action@v2
