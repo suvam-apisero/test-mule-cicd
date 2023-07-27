@@ -68,28 +68,27 @@ jobs:
 #         if: always()
 #         run: echo 'Read more [here](target/site/munit/coverage/summary.html)' >> $GITHUB_STEP_SUMMARY
           
-#       - name: Publish Test Results
-#         uses: EnricoMi/publish-unit-test-result-action@v2
-#         if: always()
-#         with:
-#           files: |
-#             target/surefire-reports/*.xml
-#           check_name: "Munit Test Results"
-#           comment_title: "Munit Tests Comments"
-#           time_unit: milliseconds
-#           comment_mode: always
-#           report_suite_logs: any
-#           report_individual_runs: true
-#           deduplicate_classes_by_file_name: true
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            target/surefire-reports/*.xml
+          check_name: "Munit Test Results"
+          comment_title: "Munit Tests Comments"
+          # comment_mode: always
+          # report_suite_logs: any
+          # report_individual_runs: true
+          # deduplicate_classes_by_file_name: true
           
-#       - name: Dorny Test Report
-#         if: always()
-#         uses: dorny/test-reporter@v1
-#         with:
-#           name: Munit Dorny Report
-#           path: target/site/munit/coverage/*.xml
-#           reporter: jest-junit
-#           only-summary: 'true'
+      - name: Dorny Test Report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Munit Dorny Report
+          path:  target/surefire-reports/*.xml
+          reporter: jest-junit
+          only-summary: 'true'
       
 #       - name: Upload coverage to Codecov
 #         uses: codecov/codecov-action@v3
