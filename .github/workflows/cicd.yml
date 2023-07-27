@@ -50,19 +50,18 @@ jobs:
           nexus_password: ${{ secrets.NEXUS_PASSWORD }}
         run: mvn -B test -f pom.xml -s .maven/settings.xml -Denv=${{vars.MULE_ENV}} -Dkey=${{secrets.SECRET_KEY}}
         
-      - name: Publish MUnit Tests report
-        if: always()
-        uses: actions/upload-artifact@v2-preview
-        with:
-          name: munit-test-reports
-          path: target/site/munit/coverage/*
+#       - name: Publish MUnit Tests report
+#         if: always()
+#         uses: actions/upload-artifact@v2-preview
+#         with:
+#           name: munit-test-reports
+#           path: target/site/munit/coverage/*
           
       - name: Test Summary
         uses: test-summary/action@v2
         with:
           paths: |
             target/surefire-reports/*.xml
-            target/sonar-reports/*.xml
           show: "all"
         if: always()
           
@@ -70,14 +69,14 @@ jobs:
 #         if: always()
 #         run: echo 'Read more [here](target/site/munit/coverage/summary.html)' >> $GITHUB_STEP_SUMMARY
           
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
-        with:
-          files: |
-            target/surefire-reports/*.xml
-          check_name: "Munit Test Results"
-          comment_title: "Munit Tests Comments"
+#       - name: Publish Test Results
+#         uses: EnricoMi/publish-unit-test-result-action@v2
+#         if: always()
+#         with:
+#           files: |
+#             target/surefire-reports/*.xml
+#           check_name: "Munit Test Results"
+#           comment_title: "Munit Tests Comments"
           # comment_mode: always
           # report_suite_logs: any
           # report_individual_runs: true
@@ -90,14 +89,14 @@ jobs:
           name: Munit Dorny Report
           path:  target/surefire-reports/*.xml
           reporter: java-junit
-          only-summary: 'true'
+#           only-summary: 'true'
       
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         if: always()
         with:
           token: 810b8ed1-0904-4538-877e-6e344b5addb0
-          files: target/surefire-reports/*.xml
+          files: target/sonar-reports/*.xml
           flags: munit-tests
           name: codecov-mulesoft-test
           verbose: true
