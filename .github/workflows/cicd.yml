@@ -95,7 +95,8 @@ jobs:
           failed: ${{ steps.dorny_summary.outputs.failed }}
           skipped: ${{ steps.dorny_summary.outputs.skipped }}
         run: |
-          echo "$(( $passed / $(($passed + $failed + $skipped)) )) coverage" >> $GITHUB_STEP_SUMMARY
+          echo $(printf "%.2f" $((10**4 * $passed/($passed + $failed + $skipped)))e-2) \
+          "% Coverage">> $GITHUB_STEP_SUMMARY
       
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v3
