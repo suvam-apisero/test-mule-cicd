@@ -57,13 +57,13 @@ jobs:
 #           name: munit-test-reports
 #           path: target/site/munit/coverage/*
           
-      - name: Test Summary
-        uses: test-summary/action@v2
-        with:
-          paths: |
-            target/surefire-reports/*.xml
+#       - name: Test Summary
+#         if: always()
+#         uses: test-summary/action@v2
+#         with:
+#           paths: |
+#             target/surefire-reports/*.xml
 #           show: "all"
-        if: always()
           
 #       - name: Publish Test Results
 #         uses: EnricoMi/publish-unit-test-result-action@v2
@@ -87,13 +87,15 @@ jobs:
           path:  target/surefire-reports/*.xml
           reporter: java-junit
           fail-on-error: 'true'
-          list-suites: 'all'
-          list-tests: 'none'
-#           only-summary: 'true'
 
       - name: Test results in summary
         if: always()
-        run: echo '${{ steps.dorny_summary.outputs.passed }} tests passed' >> $GITHUB_STEP_SUMMARY
+        env:
+          passed: ${{ steps.dorny_summary.outputs.passed }}
+          failed: ${{ steps.dorny_summary.outputs.failed }}
+          skipped: ${{ steps.dorny_summary.outputs.skipped }}
+        run: |
+          echo "$(( $passed / $(($passed + $failed + $skipped)) )) coverage" >> $GITHUB_STEP_SUMMARY
       
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v3
