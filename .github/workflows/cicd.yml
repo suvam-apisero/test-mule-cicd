@@ -87,6 +87,7 @@ jobs:
           path:  target/surefire-reports/*.xml
           reporter: java-junit
           fail-on-error: 'true'
+          list-suites: 'failed'
           list-tests: 'failed'
 #           only-summary: 'true'
 
