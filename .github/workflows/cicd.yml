@@ -23,11 +23,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    name: Build and Test with Maven
+    name: Test & Build
     
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -36,8 +34,17 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Checkout this repo
+        uses: actions/checkout@v3
       
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - name: Setup JDK 1.8
         uses: actions/setup-java@v3
         with:
@@ -50,13 +57,61 @@ jobs:
           nexus_username: ${{ secrets.NEXUS_USERNAME }}
           nexus_password: ${{ secrets.NEXUS_PASSWORD }}
         run: mvn -B test -f pom.xml -s .maven/settings.xml -Denv=${{vars.MULE_ENV}} -Dkey=${{secrets.SECRET_KEY}}
-        
+          
+      - name: Dorny Test Report
+        if: always()
+        id: dorny_summary
+        uses: dorny/test-reporter@v1
+        with:
+          name: Munit Dorny Report
+          path:  target/surefire-reports/*.xml
+          reporter: java-junit
+          fail-on-error: 'true'
+          
+      - name: Add Tests summary
+        if: always()
+        env:
+          passed: ${{ steps.dorny_summary.outputs.passed }}
+          failed: ${{ steps.dorny_summary.outputs.failed }}
+          skipped: ${{ steps.dorny_summary.outputs.skipped }}
+        run: |
+          echo "$passed / $(($passed + $failed + $skipped)) Tests passed" >> $GITHUB_STEP_SUMMARY  
+          echo "For detailed summary [Click here](${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}) >> $GITHUB_STEP_SUMMARY       
+           
+#       - name: Update Artifact name with commit hash, append date-time
+#         run: |
+#           artifactName1=$(ls target/*.jar | head -1)
+#           commitHash=$(git rev-parse --short "$GITHUB_SHA")
+#           artifactName2=$(echo $artifactName1 | sed "s/.jar/-$commitHash.`date +'%Y-%m-%d_%H%M%S'`.jar/g")
+#           mv $artifactName1 $artifactName2
+
+#       - name: Print Artifact Name
+#         run: echo $(ls target/*.jar | head -1)
+      
+#       - name: Publish Artifact Jar
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: artifacts
+#           path: target/*.jar
+
+#       #############  ############# #############
+
 #       - name: Publish MUnit Tests report
 #         if: always()
-#         uses: actions/upload-artifact@v2-preview
+#         uses: actions/upload-artifact@v3
 #         with:
 #           name: munit-test-reports
 #           path: target/site/munit/coverage/*
+
+#       - name: Upload coverage to Codecov
+#         uses: codecov/codecov-action@v3
+#         if: always()
+#         with:
+#           token: 810b8ed1-0904-4538-877e-6e344b5addb0
+#           files: target/sonar-reports/*.xml
+#           flags: munit-tests
+#           name: codecov-mulesoft-test
+#           verbose: true
           
 #       - name: Test Summary
 #         if: always()
@@ -79,62 +134,15 @@ jobs:
           # report_individual_runs: true
           # deduplicate_classes_by_file_name: true
           
-      - name: Dorny Test Report
-        if: always()
-        id: dorny_summary
-        uses: dorny/test-reporter@v1
-        with:
-          name: Munit Dorny Report
-          path:  target/surefire-reports/*.xml
-          reporter: java-junit
-          fail-on-error: 'true'
-          
-      - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v3
-        if:  always()
-        with:
-          report_paths: 'target/surefire-reports/*.xml'
-          
-      - name: Publish Surefire Report
-        if:  always()
-        uses: scacap/action-surefire-report@v1
-          
-      - name: Test results in summary
-        if: always()
-        env:
-          passed: ${{ steps.dorny_summary.outputs.passed }}
-          failed: ${{ steps.dorny_summary.outputs.failed }}
-          skipped: ${{ steps.dorny_summary.outputs.skipped }}
-        run: |
-          echo $(printf "%.2f" $((10**4 * $passed/($passed + $failed + $skipped)))e-2) \
-          "% Coverage">> $GITHUB_STEP_SUMMARY
-      
-      # - name: Upload coverage to Codecov
-      #   uses: codecov/codecov-action@v3
-      #   if: always()
-      #   with:
-      #     token: 810b8ed1-0904-4538-877e-6e344b5addb0
-      #     files: target/sonar-reports/*.xml
-      #     flags: munit-tests
-      #     name: codecov-mulesoft-test
-      #     verbose: true
-          
-        
-#       - name: Update Artifact name with commit hash, append date-time
-#         run: |
-#           artifactName1=$(ls target/*.jar | head -1)
-#           commitHash=$(git rev-parse --short "$GITHUB_SHA")
-#           artifactName2=$(echo $artifactName1 | sed "s/.jar/-$commitHash.`date +'%Y-%m-%d_%H%M%S'`.jar/g")
-#           mv $artifactName1 $artifactName2
-          
-#       - name: Print Artifact Name
-#         run: echo $(ls target/*.jar | head -1)
-      
-#       - name: Publish Artifact Jar
-#         uses: actions/upload-artifact@v3
+#       - name: Publish Test Report
+#         uses: mikepenz/action-junit-report@v3
+#         if:  always()
 #         with:
-#           name: artifacts
-#           path: target/*.jar
+#           report_paths: 'target/surefire-reports/*.xml'
+          
+#       - name: Publish Surefire Report
+#         if:  always()
+#         uses: scacap/action-surefire-report@v1
         
           
 #   create_github_issue_for_uat_deployment_attempt:
