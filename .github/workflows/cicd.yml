@@ -63,7 +63,7 @@ jobs:
         id: dorny_summary
         uses: dorny/test-reporter@v1
         with:
-          name: Munit Dorny Report
+          name: Test Summary
           path:  target/surefire-reports/*.xml
           reporter: java-junit
           fail-on-error: 'true'
@@ -76,7 +76,7 @@ jobs:
           skipped: ${{ steps.dorny_summary.outputs.skipped }}
         run: |
           echo "$passed / $(($passed + $failed + $skipped)) Tests passed" >> $GITHUB_STEP_SUMMARY  
-          echo "For detailed summary [Click here](${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}) >> $GITHUB_STEP_SUMMARY       
+          echo "For detailed summary check the **Test Summary** tab" >> $GITHUB_STEP_SUMMARY       
            
 #       - name: Update Artifact name with commit hash, append date-time
 #         run: |
