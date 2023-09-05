@@ -4,10 +4,10 @@
 
 	<groupId>com.medspeed</groupId>
 	<artifactId>test</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>mule-application</packaging>
 
-	<name>test-app</name>
+	<name>test-protection</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -70,6 +70,8 @@
 						<runCoverage>true</runCoverage>
 						<formats>
 							<format>html</format>
+							<format>json</format>
+							<format>sonar</format>
 						</formats>
 					</coverage>
 				</configuration>
