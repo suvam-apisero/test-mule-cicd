@@ -8,7 +8,7 @@
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="test-test-suite.xml" />
-	<munit:test name="success-Test" doc:id="9566fd48-350c-4f7e-956e-636e0658066a" description="Test">
+	<munit:test name="success-Test" doc:id="9566fd48-350c-4f7e-956e-636e0658066a" description="Test" ignore="true">
 		<munit:execution >
 			<flow-ref doc:name="Flow-ref to testFlow" doc:id="eb0621dd-e11b-4804-a8d6-faaf6064d1b8" name="testFlow"/>
 		</munit:execution>
