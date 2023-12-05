@@ -17,6 +17,6 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 	<flow name="testFlow" doc:id="57f03aec-ad50-440f-ab0e-42052b4114ca" >
 		<http:listener doc:name="Listener" doc:id="fa2dbcfb-ebbb-420b-bbc5-9d0eccf349fe" config-ref="HTTP_Listener_config" path="/test"/>
 		<logger level="INFO" doc:name="Logger" doc:id="b7ba54ad-12ac-4243-b294-36ef8f2a43ac" message="#[&quot;From Test App Config Msgs - &quot; ++ p('msg')]"/>
-		<logger level="INFO" doc:name="endLog" doc:id="da58d249-5983-48c5-b075-575b9e4856cb" message='#["Parameter from POM: " ++ (p("pomParam") default "NA")]'/>
+		<logger level="INFO" doc:name="endLog" doc:id="da58d249-5983-48c5-b075-575b9e4856cb" message='#["Parameter from POM 1234: " ++ (p("pomParam") default "NA")]'/>
 	</flow>
 </mule>
